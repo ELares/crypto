@@ -190,3 +190,53 @@ P1DJ7gwp0xNkSQLmNZk+LX/zm9I0U9yMYPK8WxNFz587UXRBoE/GHusCAwEAAQ==
 This is the JWK:
 {"use":"sig","kty":"RSA","kid":"some-random-id","alg":"RS512","n":"0Aq3xJfamlNqoflhXjCEsGhdO0JHKFRH0IlV-YFIAtfVTWDGbMZouhun2mcNQYy6DTw-j367ignegETq4buXJgoAd0qV4gl2bolU5J6kRnv7zv2XZO5xPfBqajzaPJdWIByG-vXA8_LLTp3E8C-TVCYQyAuLw8Z7K-WfvexmQi4swjPnGz2x0u4t7GlgNeSzcV5w2LLOL63fdbOYHn9fPEWUfc2bWVF_JTGZxgpyNxG3iabJueexojmM_gRlMD9olUSZQWIxsXp7iu9XmiT-4oKymZqYmKiikcsw9NRGCIWXEPZbZc4pPOBZhi_Dw_3KI0DW3icS05Pl-qR63pIMLiUCpC51h3JyHor162_OxqDTqCG9Veq0dzEoOKDAFrCaq7cTAZtDwrLqKPNSVHI4cvU-muCcXZ71dGnzvMGQ5HhHGZGItS057Y0flh6o7KpUCZcA_wjZAe_SqnJ4yU1zbV8DU1gpRJKfHS2nbzJVW8yFMjykofnKnXEwmfUG-DM_kewXHtxRaMkfv2xkDKRk8cOX_uYmCYm8l99N6Ub-KiTUbemfhWKw1HARHx6n2692SWwX7_0m33sIYtc0MCDQMY_Pi2PBzLHpGRo-LxBJAh-oryzsXqv2P1DJ7gwp0xNkSQLmNZk-LX_zm9I0U9yMYPK8WxNFz587UXRBoE_GHus","e":"AQAB"}
 ```
+
+# ED25519
+* Generate private & public key
+* Convert private public keys to PEM format
+## Example
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/ELares/crypto/pkg/ed25519"
+)
+
+func main() {
+	ied := ed25519.NewED25519()
+
+	// Generate a brand new ED25519 Private & Public Key
+	prvKey, pubKey, err := ied.Ed25519()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	// Convert the Private & Public Key to a PEM format
+	prvPEM, pubPEM, err := ied.ToPEM(prvKey, pubKey)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	// Output the PEM files
+	fmt.Printf("This is the private key:\n%s\n", string(prvPEM))
+	fmt.Printf("This is the public key:\n%s\n", string(pubPEM))
+}
+
+```
+
+## Output
+```console
+This is the private key:
+-----BEGIN PRIVATE KEY-----
+MC4CAQAwBQYDK2VwBCIEILza3htO6jyZPUX6rUVTTYqKvZTgR59IdxkFYkr3ZMh8
+-----END PRIVATE KEY-----
+
+This is the public key:
+-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEAmZtz4YGXqN+/0Hf4A1NXrC90tdt2N13jNBWpeAHAT0Y=
+-----END PUBLIC KEY-----
+```

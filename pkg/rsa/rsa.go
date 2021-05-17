@@ -8,6 +8,15 @@ import (
 
 	c "github.com/ELares/crypto/pkg"
 	p "github.com/ELares/crypto/pkg/pem"
+	"gopkg.in/square/go-jose.v2"
+)
+
+const (
+	// RSA2048 common rsa byte size 2048
+	RSA2048 = 2048
+
+	// RSA4096 common rsa byte size 4096
+	RSA4096 = 4096
 )
 
 type (
@@ -32,6 +41,10 @@ type (
 		ToPEMPrivateKey(*rsa.PrivateKey) (p.PrivatePEM, error)
 		ToPEMPublicKey(*rsa.PublicKey) (p.PublicPEM, error)
 		ToPEM(*rsa.PrivateKey, *rsa.PublicKey) (p.PrivatePEM, p.PublicPEM, error)
+
+		ToJWKRS256(publicKey *rsa.PublicKey, id string) ([]byte, error)
+		ToJWKRS512(publicKey *rsa.PublicKey, id string) ([]byte, error)
+		ToJWK(publicKey *rsa.PublicKey, id string, algo jose.SignatureAlgorithm) ([]byte, error)
 	}
 
 	// RSA struct to implement the IRSA methods
@@ -55,12 +68,12 @@ func (r *RSA) R4096() (*rsa.PrivateKey, *rsa.PublicKey, error) {
 
 // R2048PrivateKey generates a new RSA-2048 private key
 func (r *RSA) R2048PrivateKey() (*rsa.PrivateKey, error) {
-	return r.generateKey(2048)
+	return r.generateKey(RSA2048)
 }
 
 // R4096PrivateKey generates a new RSA-4096 private key
 func (r *RSA) R4096PrivateKey() (*rsa.PrivateKey, error) {
-	return r.generateKey(4096)
+	return r.generateKey(RSA4096)
 }
 
 // R2048PEM generates new RSA-2048 private/public pem keys
@@ -172,6 +185,28 @@ func (r *RSA) ToPEM(privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey) (p.Pri
 	}
 
 	return prvPEM, pubPEM, nil
+}
+
+// ToJWKRS512 converts RSA 4096 public key into a jwk RS512
+func (r *RSA) ToJWKRS512(publicKey *rsa.PublicKey, id string) ([]byte, error) {
+	return r.ToJWK(publicKey, id, jose.RS512)
+}
+
+// ToJWKRS256 converts RSA 2048 public key into a jwk RS256
+func (r *RSA) ToJWKRS256(publicKey *rsa.PublicKey, id string) ([]byte, error) {
+	return r.ToJWK(publicKey, id, jose.RS256)
+}
+
+// ToJWK converts RSA public key into a jwk
+func (r *RSA) ToJWK(publicKey *rsa.PublicKey, id string, algo jose.SignatureAlgorithm) ([]byte, error) {
+	jwk := jose.JSONWebKey{
+		Use:       c.SIG,
+		Algorithm: string(algo),
+		Key:       publicKey,
+		KeyID:     id,
+	}
+
+	return jwk.MarshalJSON()
 }
 
 // generateKey wrapper for rsa.GenerateKey() for unit-test mocking purposes

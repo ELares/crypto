@@ -5,7 +5,8 @@ A repo to simplify the usage of crypto libraries.
 * Generate a P521 private & public key
 * Convert private public keys to PEM format
 * Convert public key to JWK
-```
+### Example
+```go
 package main
 
 import (
@@ -32,7 +33,7 @@ func main() {
 	}
 
 	// Output the PEM files
-	fmt.Printf("This is the private key:\n%s\n\n", string(prvPEM))
+	fmt.Printf("This is the private key:\n%s\n", string(prvPEM))
 	fmt.Printf("This is the public key:\n%s\n", string(pubPEM))
 
 	// Convert the Public key to a JWK
@@ -46,8 +47,8 @@ func main() {
 }
 ```
 
-output
-```
+### Output
+```console
 This is the private key:
 -----BEGIN PRIVATE KEY-----
 MIHcAgEBBEIA8n0+TVjXcGR+MH+g5sgv4lFBXtXVC2q/TJsxupYY5x18ZNNyTLlw
@@ -56,7 +57,6 @@ ANkhp66OSs1YFRC/5NSkwgYBwWovUrjIQMr74DLN1kxEH/27dTqGO7lTp6SlYoYP
 teh+hsDk5ruY3fxlRQGFrn/gMeg0bSQFW8Oeg04bA43a8uWi5gnkxMad7M20YMvv
 gJ+uAS1Y92hKa9En7kwsqp9fKRYEiswSJDWUwLta7A==
 -----END PRIVATE KEY-----
-
 
 This is the public key:
 -----BEGIN PUBLIC KEY-----
@@ -69,3 +69,4 @@ XykWBIrMEiQ1lMC7Wuw=
 This is the JWK:
 {"use":"sig","kty":"EC","kid":"some-random-id","crv":"P-521","alg":"ES512","x":"AIUWj-MA2SGnro5KzVgVEL_k1KTCBgHBai9SuMhAyvvgMs3WTEQf_bt1OoY7uVOnpKVihg-16H6GwOTmu5jd_GVF","y":"AYWuf-Ax6DRtJAVbw56DThsDjdry5aLmCeTExp3szbRgy--An64BLVj3aEpr0SfuTCyqn18pFgSKzBIkNZTAu1rs"}
 ```
+

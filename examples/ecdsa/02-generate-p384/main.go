@@ -24,7 +24,7 @@ func main() {
 	}
 
 	// Output the PEM files
-	fmt.Printf("This is the private key:\n%s\n\n", string(prvPEM))
+	fmt.Printf("This is the private key:\n%s\n", string(prvPEM))
 	fmt.Printf("This is the public key:\n%s\n", string(pubPEM))
 
 	// Convert the Public key to a JWK

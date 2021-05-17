@@ -12,4 +12,7 @@ const (
 
 	// RSA4096 common rsa byte size 4096
 	RSA4096 = 4096
+
+	// SIG use for JWK use header
+	SIG = "sig"
 )

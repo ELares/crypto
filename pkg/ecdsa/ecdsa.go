@@ -43,6 +43,9 @@ type (
 		ToPEMPublicKey(*ecdsa.PublicKey) (p.PublicPEM, error)
 		ToPEM(*ecdsa.PrivateKey, *ecdsa.PublicKey) (p.PrivatePEM, p.PublicPEM, error)
 
+		ToJWKES512(publicKey *ecdsa.PublicKey, id string) ([]byte, error)
+		ToJWKES384(publicKey *ecdsa.PublicKey, id string) ([]byte, error)
+		ToJWKES256(publicKey *ecdsa.PublicKey, id string) ([]byte, error)
 		ToJWK(publicKey *ecdsa.PublicKey, id string, algo jose.SignatureAlgorithm) ([]byte, error)
 	}
 
@@ -232,10 +235,25 @@ func (e *ECDSA) ToPEM(privateKey *ecdsa.PrivateKey, publicKey *ecdsa.PublicKey) 
 	return prvPEM, pubPEM, nil
 }
 
+// ToJWKES512 converts ECDSA P521 public key into a jwk ES512
+func (e *ECDSA) ToJWKES512(publicKey *ecdsa.PublicKey, id string) ([]byte, error) {
+	return e.ToJWK(publicKey, id, jose.ES512)
+}
+
+// ToJWKES384 converts ECDSA P384 public key into a jwk ES384
+func (e *ECDSA) ToJWKES384(publicKey *ecdsa.PublicKey, id string) ([]byte, error) {
+	return e.ToJWK(publicKey, id, jose.ES384)
+}
+
+// ToJWKES256 converts ECDSA P256 public key into a jwk ES256
+func (e *ECDSA) ToJWKES256(publicKey *ecdsa.PublicKey, id string) ([]byte, error) {
+	return e.ToJWK(publicKey, id, jose.ES256)
+}
+
 // ToJWK converts ECDSA public key into a jwk
 func (e *ECDSA) ToJWK(publicKey *ecdsa.PublicKey, id string, algo jose.SignatureAlgorithm) ([]byte, error) {
 	jwk := jose.JSONWebKey{
-		Use:       "sig",
+		Use:       c.SIG,
 		Algorithm: string(algo),
 		Key:       publicKey,
 		KeyID:     id,
